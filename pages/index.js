@@ -1,58 +1,79 @@
-import { useState } from "react";
-import FlightCard from "../components/FlightCard";
+import React, { useState } from "react";
+import FlightCard from "../components/FlightCard/Index.js";
+import styled from "styled-components";
+
+const FormGroup = styled.section`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+`;
+
+const Label = styled.label`
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+`;
+
+const Input = styled.input`
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+`;
 
 export default function Home() {
   const [trips, setTrips] = useState([]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setTrips([...trips, { departure, destination, passengerCount }]);
-    setDeparture("");
-    setDestination("");
-    setPassengerCount(1);
+    const formData = new FormData(event.target);
+    setTrips([
+      ...trips,
+      {
+        departure: formData.get("departure"),
+        destination: formData.get("destination"),
+        passengerCount: formData.get("passengerCount"),
+      },
+    ]);
+    event.target.reset();
   };
-
-  const [departure, setDeparture] = useState("");
-  const [destination, setDestination] = useState("");
-  const [passengerCount, setPassengerCount] = useState(1);
 
   return (
     <section>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="">from</label>
-        <input
-          id=""
-          type="text"
-          maxLength="3"
-          placeholder="IATA code"
-          value={departure}
-          onChange={(event) => setDeparture(event.target.value)}
-          required
-        />
-        <br />
-        <label htmlFor="">to</label>
-        <input
-          type="text"
-          maxLength="3"
-          placeholder="IATA code"
-          value={destination}
-          onChange={(event) => setDestination(event.target.value)}
-          required
-        />
-        <br />
-        <label htmlFor="">Passengers</label>
-        <input
-          type="number"
-          min="1"
-          max="10"
-          value={passengerCount}
-          onChange={(event) => setPassengerCount(Number(event.target.value))}
-        />
-        <br />
+      <form className="form" onSubmit={handleSubmit}>
+        <FormGroup>
+          <Label htmlFor="departure">from</Label>
+          <Input
+            id="departure"
+            name="departure"
+            type="text"
+            maxLength="3"
+            required
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="destination">to</Label>
+          <Input
+            id="destination"
+            name="destination"
+            type="text"
+            maxLength="3"
+            required
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="passengerCount">Passengers</Label>
+          <Input
+            id="passengerCount"
+            name="passengerCount"
+            type="number"
+            min="1"
+            max="10"
+          />
+        </FormGroup>
         <button type="submit">add</button>
       </form>
       <section>
-        {trips.slice(0, 2).map((trip, index) => (
+        {trips.slice(Math.max(trips.length - 3, 0)).map((trip, index) => (
           <FlightCard
             key={index}
             departure={trip.departure}
