@@ -1,4 +1,4 @@
-import Navbar from "@/Components/Navbar";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import styled from "styled-components";
 

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import FlightCard from "../components/Card/Index.js";
 import styled from "styled-components";
-import Header from "@/Components/Header";
-import Footer from "@/Components/Footer";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const FormGroup = styled.section`
   display: flex;
