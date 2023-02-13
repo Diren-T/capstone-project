@@ -10,7 +10,7 @@ const StyledFooter = styled.footer`
   display: flex;
   justify-content: space-between;
 `;
-
+//Hallo
 const Footer = () => {
   return (
     <StyledFooter>
