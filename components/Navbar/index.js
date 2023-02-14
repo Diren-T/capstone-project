@@ -18,7 +18,7 @@ const StyledLink = styled(Link)`
   margin-right: 10px;
 `;
 
-export default function Navbar() {
+export default function Navbar({ apiCallData }) {
   return (
     <>
       <StyledNavbar>

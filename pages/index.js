@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import FlightCard from "../components/Card/Index.js";
 import styled from "styled-components";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Header from "@/Components/Header/index";
+import Navbar from "@/Components/Navbar/index.js";
+import { useRouter } from "next/router.js";
+import { atom, useAtom } from "jotai";
+import globalTrips from "@/public/data";
 
-const FormGroup = styled.section`
+const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
-  // background-color: #eae;
+  margin-bottom: 1rem;
 `;
 
 const Label = styled.label`
@@ -18,45 +20,80 @@ const Label = styled.label`
 
 const Input = styled.input`
   padding: 0.5rem;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: 1px solid lightgray;
+  border-radius: 0.25rem;
+  border: 1px solid gray;
 `;
 
 const RadioContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: px;
+  margin-bottom: 1rem;
 `;
 
+const url = "https://beta3.api.climatiq.io/travel/flights";
+const key = "Bearer 1592SDMAYNMEM5HXCP8S7953NK93";
+
+export const globalTrip = atom({});
+
 export default function Home() {
-  const [trips, setTrips] = useState([]);
+  const [, setTrip] = useAtom(globalTrip);
   const [tripType, setTripType] = useState("");
   const [tripClass, setTripClass] = useState("");
+  const [trips] = useAtom(globalTrips);
 
-  const handleSubmit = (event) => {
+  const router = useRouter();
+
+  async function handleSubmit(event) {
     event.preventDefault();
-    const form = event.target;
-    const formData = new FormData(form);
+    const formData = new FormData(event.target);
+    const tripData = Object.fromEntries(formData);
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Authorization: key,
+        },
+        body: JSON.stringify({
+          legs: [
+            {
+              from: tripData.departure,
+              to: tripData.destination,
+              passengers: parseInt(tripData.passengerCount),
+              class: tripData.tripClass,
+            },
+          ],
+        }),
+      });
+      if (!response.ok) {
+        console.error(response.status);
+      }
+      const responseData = await response.json();
 
-    setTrips([
-      ...trips,
-      {
-        departure: formData.get("departure"),
-        destination: formData.get("destination"),
-        passengerCount: formData.get("passengerCount"),
-        tripType: formData.get("tripType"),
-        tripClass: formData.get("tripClass"),
-      },
-    ]);
-    event.target.reset();
-  };
+      const newTrip = {
+        id: crypto.randomUUID,
+        from: tripData.departure,
+        to: tripData.destination,
+        co2e: responseData.co2e,
+        passengerCount: tripData.passengerCount,
+        type: tripData.tripType,
+        class: tripData.tripClass,
+      };
+      setTrip(newTrip);
+      router.push("/dashboard");
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
 
   return (
     <article>
       <Header />
       <section>
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={(event) => {
+            handleSubmit(event);
+          }}
+        >
           <FormGroup>
             <Label htmlFor="departure">from</Label>
             <Input
@@ -114,8 +151,8 @@ export default function Home() {
                 type="radio"
                 id="economyClass"
                 name="tripClass"
-                value="economyClass"
-                checked={tripClass === "economyClass"}
+                value="economy"
+                checked={tripClass === "economy"}
                 onChange={(event) => setTripClass(event.target.value)}
               />
               <label htmlFor="businessClass">business class</label>
@@ -123,8 +160,8 @@ export default function Home() {
                 type="radio"
                 id="businessClass"
                 name="tripClass"
-                value="businessClass"
-                checked={tripClass === "businessClass"}
+                value="business"
+                checked={tripClass === "business"}
                 onChange={(event) => setTripClass(event.target.value)}
               />
               <label htmlFor="firstClass">first class</label>
@@ -132,28 +169,20 @@ export default function Home() {
                 type="radio"
                 id="firstClass"
                 name="tripClass"
-                value="firstClass"
-                checked={tripClass === "firstClass"}
+                value="first"
+                checked={tripClass === "first"}
                 onChange={(event) => setTripClass(event.target.value)}
               />
             </FormGroup>
           </RadioContainer>
-
-          <section>
-            <button type="submit">add</button>
-            {trips.length > 0 && (
-              <FlightCard
-                departure={trips[trips.length - 1].departure}
-                destination={trips[trips.length - 1].destination}
-                passengerCount={trips[trips.length - 1].passengerCount}
-                tripType={trips[trips.length - 1].tripType}
-                tripClass={trips[trips.length - 1].tripClass}
-              />
-            )}
-          </section>
+          <button type="submit">add</button>
         </form>
+        <section>
+          {trips &&
+            trips.map((trip) => <FlightCard key={trip.id} trip={trip} />)}
+        </section>
       </section>
-      <Footer />
+      <Navbar />
     </article>
   );
 }
