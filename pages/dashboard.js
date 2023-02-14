@@ -1,11 +1,9 @@
 import styled from "styled-components";
-import Navbar from "@/Components/Navbar";
-import Header from "@/Components/Header";
-import Footer from "@/Components/Footer/index.js";
+import Navbar from "@/components/Navbar";
+import Header from "@/components/Header";
 import { useAtom } from "jotai";
 import globalTrips from "@/public/data";
 import { globalTrip } from ".";
-import FlightCard from "./flightCard";
 
 const StyledCard = styled.div`
   display: flex;
