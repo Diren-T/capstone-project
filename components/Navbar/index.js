@@ -35,7 +35,7 @@ export default function Navbar() {
             />
           </svg>
         </Link>
-        <Link href="/dashboard">
+        <Link href="/">
           <svg
             width="60"
             height="60"
