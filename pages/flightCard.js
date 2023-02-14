@@ -3,16 +3,7 @@ import { useAtom } from "jotai";
 import globalTrips from "@/public/data";
 
 export default function FlightCard({ trip }) {
-  const [trips, setTrips] = useAtom(globalTrips);
+  const [trip, setTrip] = useAtom(globalTrips);
 
-  return (
-    <article>
-      <section>
-        {/* <p>Departure: {trip.from}</p> */}
-        <p>Destination: {trip.to}</p>
-        <p>Passengers: {trip.passengerCount}</p>
-        <p>co2: {parseInt(trip.co2e)} kg</p>
-      </section>
-    </article>
-  );
+  return <FlightCard trip={trip} />;
 }

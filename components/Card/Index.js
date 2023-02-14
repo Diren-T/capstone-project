@@ -1,18 +1,11 @@
-export default function FlightCard({
-  departure,
-  destination,
-  passengerCount,
-  tripType,
-  tripClass,
-}) {
+export default function FlightCard({ trip }) {
   return (
     <article>
       <section>
-        <p>Departure: {departure}</p>
-        <p>Destination: {destination}</p>
-        <p>Passengers: {passengerCount}</p>
-        <p>Trip Type: {tripType}</p>
-        <p>Trip Class: {tripClass}</p>
+        <p>Departure: {trip.from}</p>
+        <p>Destination: {trip.to}</p>
+        <p>Passengers: {trip.passengerCount}</p>
+        <p>co2: {parseInt(trip.co2e)} kg</p>
       </section>
     </article>
   );
