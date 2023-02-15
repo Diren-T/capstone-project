@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import FlightCard from "../components/Card/Index.js";
 import styled from "styled-components";
 import Header from "@/components/Header/index";
@@ -33,6 +33,8 @@ const RadioContainer = styled.div`
 export const globalTrip = atom({});
 
 export default function Home() {
+  const [tripClass, setTripClass] = useState("economyClass");
+  const [tripType, setTripType] = useState("oneWay");
   const [, setTrip] = useAtom(globalTrip);
 
   const [trips] = useAtom(globalTrips);
@@ -55,7 +57,6 @@ export default function Home() {
               from: tripData.departure,
               to: tripData.destination,
               passengers: parseInt(tripData.passengerCount),
-              class: tripData.tripClass,
             },
           ],
         }),
@@ -66,11 +67,23 @@ export default function Home() {
       }
       const { requestco2 } = await response.json();
 
+      let co2e = requestco2.co2e;
+      console.log(requestco2.co2e);
+      if (tripType === "roundTrip") {
+        co2e *= 2;
+      }
+      if (tripClass === "businessClass") {
+        co2e *= 2;
+      }
+      if (tripClass === "firstClass") {
+        co2e *= 2.5;
+      }
+
       const newTrip = {
         id: crypto.randomUUID,
         from: tripData.departure,
         to: tripData.destination,
-        co2e: requestco2.co2e,
+        co2e: co2e,
         passengerCount: tripData.passengerCount,
         type: tripData.tripType,
         class: tripData.tripClass,
@@ -83,6 +96,12 @@ export default function Home() {
     }
   }
 
+  function handleTripTypeChange(event) {
+    setTripType(event.target.value);
+  }
+  function handleTripClassChange(event) {
+    setTripClass(event.target.value);
+  }
   return (
     <>
       <Header />
@@ -116,6 +135,8 @@ export default function Home() {
                 id="roundTrip"
                 name="tripType"
                 value="roundTrip"
+                checked={tripType === "roundTrip"}
+                onChange={handleTripTypeChange}
               />
             </RadioContainer>
           </FormGroup>
@@ -136,21 +157,27 @@ export default function Home() {
                 type="radio"
                 id="economyClass"
                 name="tripClass"
-                value="economy"
+                value="economyClass"
+                checked={tripClass === "economyClass"}
+                onChange={handleTripClassChange}
               />
               <label htmlFor="businessClass">business class</label>
               <input
                 type="radio"
                 id="businessClass"
                 name="tripClass"
-                value="business"
+                value="businessClass"
+                checked={tripClass === "businessClass"}
+                onChange={handleTripClassChange}
               />
               <label htmlFor="firstClass">first class</label>
               <input
                 type="radio"
                 id="firstClass"
                 name="tripClass"
-                value="first"
+                value="firstClass"
+                checked={tripClass === "firstClass"}
+                onChange={handleTripClassChange}
               />
             </FormGroup>
           </RadioContainer>

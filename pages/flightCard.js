@@ -1,4 +1,3 @@
-import React from "react";
 import { useAtom } from "jotai";
 import globalTrips from "@/public/data";
 import FlightCard from "@/components/Card/Index";

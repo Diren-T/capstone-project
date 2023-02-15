@@ -3,19 +3,20 @@ import styled from "styled-components";
 
 const StyledNavbar = styled.div`
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   height: 60px;
   position: fixed;
   bottom: 20px;
-  background: lightgray;
+  left: 0;
+  right: 0;
 `;
 
 const StyledLink = styled(Link)`
-  justify-content: space-evenly;
   display: flex;
-  align-items: flex-end
-  margin-right: 10px;
+  align-items: center;
+  margin-left: 40px;
+  margin-right: 40px;
 `;
 
 export default function Navbar() {
