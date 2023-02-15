@@ -30,15 +30,11 @@ const RadioContainer = styled.div`
   margin-bottom: 1rem;
 `;
 
-const url = "https://beta3.api.climatiq.io/travel/flights";
-const key = "Bearer 1592SDMAYNMEM5HXCP8S7953NK93";
-
 export const globalTrip = atom({});
 
 export default function Home() {
   const [, setTrip] = useAtom(globalTrip);
-  const [tripType, setTripType] = useState("");
-  const [tripClass, setTripClass] = useState("");
+
   const [trips] = useAtom(globalTrips);
 
   const router = useRouter();
@@ -48,10 +44,10 @@ export default function Home() {
     const formData = new FormData(event.target);
     const tripData = Object.fromEntries(formData);
     try {
-      const response = await fetch(url, {
+      const response = await fetch("/api/climatiq", {
         method: "POST",
         headers: {
-          Authorization: key,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           legs: [
@@ -64,20 +60,22 @@ export default function Home() {
           ],
         }),
       });
+
       if (!response.ok) {
         console.error(response.status);
       }
-      const responseData = await response.json();
-
+      const { requestco2 } = await response.json();
+      console.log(requestco2);
       const newTrip = {
         id: crypto.randomUUID,
         from: tripData.departure,
         to: tripData.destination,
-        co2e: responseData.co2e,
+        co2e: requestco2.co2e,
         passengerCount: tripData.passengerCount,
         type: tripData.tripType,
         class: tripData.tripClass,
       };
+      console.log(newTrip);
       setTrip(newTrip);
       router.push("/dashboard");
     } catch (error) {
@@ -86,7 +84,7 @@ export default function Home() {
   }
 
   return (
-    <article>
+    <>
       <Header />
       <section>
         <form
@@ -115,22 +113,13 @@ export default function Home() {
             />
             <RadioContainer>
               <label htmlFor="oneWay">One Way</label>
-              <input
-                type="radio"
-                id="oneWay"
-                name="tripType"
-                value="oneWay"
-                checked={tripType === "oneWay"}
-                onChange={(event) => setTripType(event.target.value)}
-              />
+              <input type="radio" id="oneWay" name="tripType" value="oneWay" />
               <label htmlFor="roundTrip">Round Trip</label>
               <input
                 type="radio"
                 id="roundTrip"
                 name="tripType"
                 value="roundTrip"
-                checked={tripType === "roundTrip"}
-                onChange={(event) => setTripType(event.target.value)}
               />
             </RadioContainer>
           </FormGroup>
@@ -152,8 +141,6 @@ export default function Home() {
                 id="economyClass"
                 name="tripClass"
                 value="economy"
-                checked={tripClass === "economy"}
-                onChange={(event) => setTripClass(event.target.value)}
               />
               <label htmlFor="businessClass">business class</label>
               <input
@@ -161,8 +148,6 @@ export default function Home() {
                 id="businessClass"
                 name="tripClass"
                 value="business"
-                checked={tripClass === "business"}
-                onChange={(event) => setTripClass(event.target.value)}
               />
               <label htmlFor="firstClass">first class</label>
               <input
@@ -170,8 +155,6 @@ export default function Home() {
                 id="firstClass"
                 name="tripClass"
                 value="first"
-                checked={tripClass === "first"}
-                onChange={(event) => setTripClass(event.target.value)}
               />
             </FormGroup>
           </RadioContainer>
@@ -183,6 +166,6 @@ export default function Home() {
         </section>
       </section>
       <Navbar />
-    </article>
+    </>
   );
 }

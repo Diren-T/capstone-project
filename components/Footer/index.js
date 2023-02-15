@@ -7,14 +7,10 @@ const StyledFooter = styled.footer`
   background: grey;
   display: flex;
   justify-content: space-between;
-
-  border-radius: 30px;
-  margin-right: 400x;
-  margin-left: 0%;
 `;
 
 const Footer = () => {
-  return <StyledFooter></StyledFooter>;
+  return <StyledFooter />;
 };
 
 export default Footer;

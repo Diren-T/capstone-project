@@ -12,13 +12,13 @@ const StyledNavbar = styled.div`
 `;
 
 const StyledLink = styled(Link)`
-  justify-sontent: space-evebly;
+  justify-content: space-evenly;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-end
   margin-right: 10px;
 `;
 
-export default function Navbar({ apiCallData }) {
+export default function Navbar() {
   return (
     <>
       <StyledNavbar>

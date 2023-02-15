@@ -49,9 +49,7 @@ export default function Dashboard() {
         </StyledCardContent>
       </StyledCard>
 
-      <div>
-        <Navbar />
-      </div>
+      <Navbar />
     </>
   );
 }
