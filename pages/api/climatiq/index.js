@@ -7,12 +7,11 @@ export default async function handler(request, response) {
     },
     body: JSON.stringify(request.body),
   });
-  console.log("request.body", request.body);
+
   if (request.method === "POST") {
     try {
-      console.log("result", result);
       const requestco2 = await result.json();
-      console.log(requestco2);
+
       return response.status(201).json({ requestco2 });
     } catch (error) {
       console.error(error);

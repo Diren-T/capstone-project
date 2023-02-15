@@ -65,7 +65,7 @@ export default function Home() {
         console.error(response.status);
       }
       const { requestco2 } = await response.json();
-      console.log(requestco2);
+
       const newTrip = {
         id: crypto.randomUUID,
         from: tripData.departure,
@@ -75,7 +75,7 @@ export default function Home() {
         type: tripData.tripType,
         class: tripData.tripClass,
       };
-      console.log(newTrip);
+
       setTrip(newTrip);
       router.push("/dashboard");
     } catch (error) {
@@ -87,11 +87,7 @@ export default function Home() {
     <>
       <Header />
       <section>
-        <form
-          onSubmit={(event) => {
-            handleSubmit(event);
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <FormGroup>
             <Label htmlFor="departure">from</Label>
             <Input
