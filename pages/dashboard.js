@@ -92,12 +92,7 @@ export default function Dashboard() {
           )}
         </StyledCardContent>
       </StyledCard>
-      <SavedCard>
-        <SavedCardContent>
-          {trips &&
-            trips.map((trip) => <FlightCard key={trip.id} trip={trip} />)}
-        </SavedCardContent>
-      </SavedCard>
+      <SavedCard></SavedCard>
 
       <Navbar />
     </>
