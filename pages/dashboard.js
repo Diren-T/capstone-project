@@ -68,7 +68,6 @@ export default function Dashboard() {
 
   return (
     <>
-      <Header />
       <StyledCard>
         <StyledCardContent>
           {!trip.id ? (

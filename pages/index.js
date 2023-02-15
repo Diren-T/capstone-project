@@ -104,7 +104,6 @@ export default function Home() {
   }
   return (
     <>
-      <Header />
       <section>
         <form onSubmit={handleSubmit}>
           <FormGroup>
@@ -188,7 +187,7 @@ export default function Home() {
             trips.map((trip) => <FlightCard key={trip.id} trip={trip} />)}
         </section>
       </section>
-      <Navbar />
+      {/* <Navbar /> */}
     </>
   );
 }
