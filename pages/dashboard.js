@@ -24,7 +24,6 @@ const StyledCardContent = styled.div`
   text-align: center;
   font-size: 15px;
   color: #333333;
-
   display: flex;
   justify-content: center;
   align-items: center;
