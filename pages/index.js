@@ -187,7 +187,6 @@ export default function Home() {
             trips.map((trip) => <FlightCard key={trip.id} trip={trip} />)}
         </section>
       </section>
-      {/* <Navbar /> */}
     </>
   );
 }
