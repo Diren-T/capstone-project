@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import FlightCard from "../components/Card/Index.js";
 import { useAtom } from "jotai";
 import globalTrips from "@/public/data";
-import { globalTrip, savedTrips } from ".";
+import { globalTrip } from ".";
 import { useEffect } from "react";
 
 const StyledCard = styled.div`
@@ -24,7 +24,6 @@ const StyledCardContent = styled.div`
   text-align: center;
   font-size: 15px;
   color: #333333;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,19 +68,34 @@ export default function Dashboard() {
   const [trip, setTrip] = useAtom(globalTrip);
   const [saved, setSaved] = useAtom(globalTrips);
 
-  // Function to delete a saved trip
   function handleDelete(savedTrip) {
     const updatedSaved = saved.filter((t) => t.id !== savedTrip.id);
     setSaved(updatedSaved);
-    // Remove the deleted trip from localStorage
-    localStorage.setItem("savedTrips", JSON.stringify(updatedSaved));
+    localStorage.removeItem(`trip-${savedTrip.id}`);
   }
 
   useEffect(() => {
-    // Get saved trips from localStorage on page load
-    const savedTrips = JSON.parse(localStorage.getItem("savedTrips")) || [];
-    setSaved(savedTrips);
+    initializeSavedTrips();
   }, []);
+
+  function initializeSavedTrips() {
+    const savedTrips = Object.entries(localStorage)
+      .filter(([key]) => key.startsWith("trip-"))
+      .map(([key, value]) => JSON.parse(value));
+    setSaved(savedTrips);
+  }
+
+  function saveTripToLocalStorage(trip) {
+    localStorage.setItem(`trip-${trip.id}`, JSON.stringify(trip));
+  }
+
+  function handleSaveTrip() {
+    if (trip) {
+      setTrips([...trips, trip]);
+      setTrip({});
+      saveTripToLocalStorage(trip);
+    }
+  }
 
   return (
     <>
@@ -94,17 +108,7 @@ export default function Dashboard() {
               <p>{trip.from}</p>
               <p>{trip.to}</p>
               <p>CO₂ {trip.co2e} kg</p>
-              <StyledButton
-                onClick={() => {
-                  if (trip) {
-                    setSaved([...saved, trip]);
-                    setTrips([...trips, trip]);
-                    setTrip({});
-                  }
-                }}
-              >
-                Save Trip
-              </StyledButton>
+              <StyledButton onClick={handleSaveTrip}>Save Trip</StyledButton>
             </StyledDiv>
           )}
         </StyledCardContent>

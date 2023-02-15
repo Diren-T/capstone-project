@@ -4,31 +4,82 @@ import styled from "styled-components";
 import { useRouter } from "next/router.js";
 import { atom, useAtom } from "jotai";
 import globalTrips from "@/public/data";
+import { nanoid } from "nanoid";
+
+export const globalTrip = atom({});
+
+const Container = styled.div`
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-size: 16px;
+`;
 
 const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
   margin-bottom: 1rem;
 `;
 
 const Label = styled.label`
-  font-weight: bold;
+  display: block;
   margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: #333;
 `;
 
 const Input = styled.input`
+  display: block;
+  width: 100%;
   padding: 0.5rem;
-  border-radius: 0.25rem;
-  border: 1px solid gray;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #f0f0f0;
 `;
 
 const RadioContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
   margin-bottom: 1rem;
+  text-align: center;
 `;
 
-export const globalTrip = atom({});
+const Ul1 = styled.ul`
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Ul2 = styled.ul`
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const RadioLabel = styled.label`
+  display: inline-flex;
+  align-items: center;
+  margin-right: 1rem;
+  font-size: 0.875rem;
+  color: #333;
+`;
+
+const RadioButton = styled.input`
+  margin-right: 0.5rem;
+`;
+
+const Button = styled.button`
+  display: block;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #333;
+  cursor: pointer;
+`;
 
 export default function Home() {
   const [tripClass, setTripClass] = useState("economyClass");
@@ -79,6 +130,7 @@ export default function Home() {
 
       const newTrip = {
         id: crypto.randomUUID,
+
         from: tripData.departure,
         to: tripData.destination,
         co2e: co2e,
@@ -110,7 +162,7 @@ export default function Home() {
               id="departure"
               name="departure"
               type="text"
-              maxLength="3"
+              maxLength="5"
               required
             />
           </FormGroup>
@@ -120,22 +172,9 @@ export default function Home() {
               id="destination"
               name="destination"
               type="text"
-              maxLength="3"
+              maxLength="5"
               required
             />
-            <RadioContainer>
-              <label htmlFor="oneWay">One Way</label>
-              <input type="radio" id="oneWay" name="tripType" value="oneWay" />
-              <label htmlFor="roundTrip">Round Trip</label>
-              <input
-                type="radio"
-                id="roundTrip"
-                name="tripType"
-                value="roundTrip"
-                checked={tripType === "roundTrip"}
-                onChange={handleTripTypeChange}
-              />
-            </RadioContainer>
           </FormGroup>
           <FormGroup>
             <Label htmlFor="passengerCount">Passengers</Label>
@@ -148,7 +187,20 @@ export default function Home() {
             />
           </FormGroup>
           <RadioContainer>
-            <FormGroup>
+            <Ul1>
+              <label htmlFor="oneWay">One Way</label>
+              <input type="radio" id="oneWay" name="tripType" value="oneWay" />
+              <label htmlFor="roundTrip">Round Trip</label>
+              <input
+                type="radio"
+                id="roundTrip"
+                name="tripType"
+                value="roundTrip"
+                checked={tripType === "roundTrip"}
+                onChange={handleTripTypeChange}
+              />
+            </Ul1>
+            <Ul2>
               <label htmlFor="economyClass">economy class</label>
               <input
                 type="radio"
@@ -176,9 +228,9 @@ export default function Home() {
                 checked={tripClass === "firstClass"}
                 onChange={handleTripClassChange}
               />
-            </FormGroup>
+            </Ul2>
           </RadioContainer>
-          <button type="submit">add</button>
+          <Button type="submit">add</Button>
         </form>
         <section>
           {trips &&
