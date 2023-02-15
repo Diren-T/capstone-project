@@ -1,8 +1,6 @@
 import { useState } from "react";
 import FlightCard from "../components/Card/Index.js";
 import styled from "styled-components";
-import Header from "@/components/Header/index";
-import Navbar from "@/components/Navbar/index.js";
 import { useRouter } from "next/router.js";
 import { atom, useAtom } from "jotai";
 import globalTrips from "@/public/data";

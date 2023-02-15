@@ -5,6 +5,7 @@ import FlightCard from "../components/Card/Index.js";
 import { useAtom } from "jotai";
 import globalTrips from "@/public/data";
 import { globalTrip, savedTrips } from ".";
+import { useEffect } from "react";
 
 const StyledCard = styled.div`
   display: flex;
@@ -61,10 +62,26 @@ const SavedCardContent = styled.div`
   color: #333333;
 `;
 
+const DeleteButton = styled.button``;
+
 export default function Dashboard() {
   const [trips, setTrips] = useAtom(globalTrips);
   const [trip, setTrip] = useAtom(globalTrip);
   const [saved, setSaved] = useAtom(globalTrips);
+
+  // Function to delete a saved trip
+  function handleDelete(savedTrip) {
+    const updatedSaved = saved.filter((t) => t.id !== savedTrip.id);
+    setSaved(updatedSaved);
+    // Remove the deleted trip from localStorage
+    localStorage.setItem("savedTrips", JSON.stringify(updatedSaved));
+  }
+
+  useEffect(() => {
+    // Get saved trips from localStorage on page load
+    const savedTrips = JSON.parse(localStorage.getItem("savedTrips")) || [];
+    setSaved(savedTrips);
+  }, []);
 
   return (
     <>
@@ -94,8 +111,15 @@ export default function Dashboard() {
       </StyledCard>
       <SavedCard>
         <SavedCardContent>
-          {trips &&
-            trips.map((trip) => <FlightCard key={trip.id} trip={trip} />)}
+          {saved &&
+            saved.map((trip) => (
+              <div key={trip.id}>
+                <FlightCard trip={trip} />
+                <DeleteButton onClick={() => handleDelete(trip)}>
+                  Delete
+                </DeleteButton>
+              </div>
+            ))}
         </SavedCardContent>
       </SavedCard>
       <Navbar />
