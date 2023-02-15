@@ -10,6 +10,7 @@ const StyledNavbar = styled.div`
   bottom: 20px;
   left: 0;
   right: 0;
+  gap: 4rem;
 `;
 
 const StyledLink = styled(Link)`
