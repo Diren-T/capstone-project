@@ -8,6 +8,10 @@ import { nanoid } from "nanoid";
 
 export const globalTrip = atom({});
 
+const Form = styled.form`
+  padding: 2rem;
+`;
+
 const Container = styled.div`
   max-width: 500px;
   margin: 0 auto;
@@ -79,6 +83,10 @@ const Button = styled.button`
   color: #fff;
   background-color: #333;
   cursor: pointer;
+`;
+
+const Section = styled.section`
+  padding: 2rem;
 `;
 
 export default function Home() {
@@ -155,7 +163,7 @@ export default function Home() {
   return (
     <>
       <section>
-        <form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
           <FormGroup>
             <Label htmlFor="departure">from</Label>
             <Input
@@ -231,11 +239,11 @@ export default function Home() {
             </Ul2>
           </RadioContainer>
           <Button type="submit">add</Button>
-        </form>
-        <section>
+        </Form>
+        <Section>
           {trips &&
             trips.map((trip) => <FlightCard key={trip.id} trip={trip} />)}
-        </section>
+        </Section>
       </section>
     </>
   );

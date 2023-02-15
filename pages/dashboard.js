@@ -10,7 +10,7 @@ import { useEffect } from "react";
 const StyledCard = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: lightgrey;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 15px;
   margin: 2rem;
